@@ -6,10 +6,12 @@ require_relative '../deck/deck'
 require_relative '../turn/player_turn'
 require_relative '../turn/computer_turn'
 require_relative '../constants/common'
+require_relative '../utils/highlight'
 require_relative './bet'
 require_relative './winner'
 
 class Game
+  include Highlight
   include Bet
   include Winner
 
@@ -47,14 +49,34 @@ class Game
   end
 
   def finish
+    puts "Карты дилера: #{@dealer.hand.card_labels} (#{@dealer.hand.value})"
+
     announce_winner
     give_rewards(winners)
 
-    prompt_for_continue
+    continue if prompt_for_continue != 'stop'
+  end
+
+  def continue
+    @deck = nil
+
+    @current_player = @player
+    @turn_counter = 1
+    @turn = nil
+
+    @finished = false
+
+    @players.each do |player|
+      player.hand.cards = []
+    end
+
+    run
   end
 
   def prompt_for_continue
-    puts 'Введите любой текст для начала новой игры'
+    puts "Введите любой текст для начала нового раунда, #{highlight('stop')} чтобы пректатить"
+
+    gets.chomp
   end
 
   def finish_turn
