@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Hand
-  attr_reader :cards
+  attr_accessor :cards
 
   def initialize(cards)
     @cards = cards
