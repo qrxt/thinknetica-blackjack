@@ -1,5 +1,8 @@
 # Общее
 
+install:
+	bundle install
+
 lint:
 	rubocop --config ./.rubocop.yml
 
