@@ -16,6 +16,8 @@ class ComputerTurn < Turn
   private
 
   def choose_option
+    return 'reveal' if @player.score == 21
+
     should_skip ? 'skip' : 'draw'
   end
 
