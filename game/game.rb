@@ -28,18 +28,22 @@ class Game
     @turn_counter = 1
     @turn = nil
 
-    @finished = false
+    @game_finished = false
+    @round_finished = false
   end
 
   def run
     prepare
+
+    return if @game_finished
+
     game_loop
   end
 
   private
 
   def game_loop
-    return finish if @finished
+    return finish if @round_finished
 
     @turn.run
 
@@ -64,7 +68,7 @@ class Game
     @turn_counter = 1
     @turn = nil
 
-    @finished = false
+    @round_finished = false
 
     @players.each do |player|
       player.hand.cards = []
@@ -81,12 +85,12 @@ class Game
   end
 
   def finish_turn
-    @finished = true if should_finish
+    @round_finished = true if should_finish_round
 
     prepare_next_turn
   end
 
-  def should_finish
+  def should_finish_round
     [
       @players.any?(&:revealing),
       @players.all?(&:too_many_cards?),
@@ -104,7 +108,8 @@ class Game
 
   def prepare
     unless players_with_no_money.empty?
-      players_with_no_money.each(&:display_no_money)
+      players_with_no_money.each(&method(:display_no_money))
+      @game_finished = true
 
       return
     end
