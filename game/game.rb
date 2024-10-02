@@ -68,6 +68,7 @@ class Game
 
     @players.each do |player|
       player.hand.cards = []
+      player.revealing = false
     end
 
     run
