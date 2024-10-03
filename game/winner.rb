@@ -2,9 +2,9 @@
 
 module Winner
   def give_rewards(winners)
-    winners.each do |winner|
-      reward = @bank / winners.size
+    reward = @bank / winners.size
 
+    winners.each do |winner|
       puts "Игрок #{winner.name} получает #{reward}"
 
       winner.balance += reward
